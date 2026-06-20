@@ -53,12 +53,12 @@ player_speed = 4.5
 TAMANHO = 22
 
 INIMIGOS_CONFIG = [
-    {"nome": "Unicesumar",  "cor": (0, 80, 200),    "tipo": "perseguicao", "speed": 2.2, "fase_inicio": 0},
-    {"nome": "Unibrasil",   "cor": (230, 190, 0),   "tipo": "perseguicao", "speed": 2.4, "fase_inicio": 1},
+    {"nome": "Unicesumar",  "cor": (0, 80, 200),    "tipo": "perseguicao", "speed": 2.4, "fase_inicio": 0},
+    {"nome": "Unibrasil",   "cor": (230, 190, 0),   "tipo": "perseguicao", "speed": 2.5, "fase_inicio": 1},
     {"nome": "Unicuritiba", "cor": (150, 50, 200),  "tipo": "perseguicao", "speed": 2.6, "fase_inicio": 2},
     {"nome": "Positivo",    "cor": (255, 120, 0),   "tipo": "perseguicao", "speed": 2.8, "fase_inicio": 3},
-    {"nome": "UTFPR",       "cor": (120, 120, 120), "tipo": "patrulha",    "speed": 6.0, "fase_inicio": 4, "x_fixo": 780},
-    {"nome": "UFPR",        "cor": (255, 255, 255), "tipo": "patrulha",    "speed": 6.0, "fase_inicio": 4, "x_fixo": 920},
+    {"nome": "UTFPR",       "cor": (120, 120, 120), "tipo": "patrulha",    "speed": 7.0, "fase_inicio": 4, "x_fixo": 780},
+    {"nome": "UFPR",        "cor": (255, 255, 255), "tipo": "patrulha",    "speed": 7.0, "fase_inicio": 4, "x_fixo": 920},
 ]
 
 def criar_inimigos():
