@@ -18,6 +18,25 @@ fonte_grande = pygame.font.SysFont("Arial", 72, bold=True)
 fonte_media = pygame.font.SysFont("Arial", 36, bold=True)
 
 estado = "menu"
+TAMANHO = 22
+player_speed = 4.5
+
+def carregar_logo(arquivo):
+    try:
+        img = pygame.image.load(f"imagens/{arquivo}").convert_alpha()
+        return pygame.transform.smoothscale(img, (TAMANHO, TAMANHO))
+    except:
+        return None
+
+logos = {
+    "PUCPR":       carregar_logo("pucpr.png"),
+    "Unicesumar":  carregar_logo("uniCesumar.png"),
+    "Unibrasil":   carregar_logo("unibrasil-1.png"),
+    "Unicuritiba": carregar_logo("Unicuritiba.png"),
+    "Positivo":    carregar_logo("UP.png"),
+    "UFPR":        carregar_logo("ufpr.png"),
+    "UTFPR":       carregar_logo("utfpr.png"),
+}
 
 fases = [
     {"top": 200, "bottom": 500},
@@ -49,16 +68,13 @@ def mover_com_colisao(rect, dx, dy):
             if dy > 0: rect.bottom = parede.top
             if dy < 0: rect.top    = parede.bottom
 
-player_speed = 4.5
-TAMANHO = 22
-
 INIMIGOS_CONFIG = [
-    {"nome": "Unicesumar",  "cor": (0, 80, 200),    "tipo": "perseguicao", "speed": 2.4, "fase_inicio": 0},
-    {"nome": "Unibrasil",   "cor": (230, 190, 0),   "tipo": "perseguicao", "speed": 2.5, "fase_inicio": 1},
-    {"nome": "Unicuritiba", "cor": (150, 50, 200),  "tipo": "perseguicao", "speed": 2.6, "fase_inicio": 2},
-    {"nome": "Positivo",    "cor": (255, 120, 0),   "tipo": "perseguicao", "speed": 2.8, "fase_inicio": 3},
-    {"nome": "UTFPR",       "cor": (120, 120, 120), "tipo": "patrulha",    "speed": 7.0, "fase_inicio": 4, "x_fixo": 780},
-    {"nome": "UFPR",        "cor": (255, 255, 255), "tipo": "patrulha",    "speed": 7.0, "fase_inicio": 4, "x_fixo": 920},
+    {"nome": "Unicesumar",  "cor": (0, 80, 200),    "tipo": "perseguicao", "speed": 2.6, "fase_inicio": 0},
+    {"nome": "Unibrasil",   "cor": (230, 190, 0),   "tipo": "perseguicao", "speed": 2.9, "fase_inicio": 1},
+    {"nome": "Unicuritiba", "cor": (150, 50, 200),  "tipo": "perseguicao", "speed": 3.0, "fase_inicio": 2},
+    {"nome": "Positivo",    "cor": (255, 120, 0),   "tipo": "perseguicao", "speed": 3.7, "fase_inicio": 3},
+    {"nome": "UTFPR",       "cor": (120, 120, 120), "tipo": "patrulha",    "speed": 9.0, "fase_inicio": 4, "x_fixo": 780},
+    {"nome": "UFPR",        "cor": (255, 255, 255), "tipo": "patrulha",    "speed": 9.0, "fase_inicio": 4, "x_fixo": 920},
 ]
 
 def criar_inimigos():
@@ -119,10 +135,20 @@ def resetar_jogo():
 
 resetar_jogo()
 
-btn_jogar   = pygame.Rect(SCREEN_W // 2 - 100, 320, 200, 55)
-btn_sair    = pygame.Rect(SCREEN_W // 2 - 100, 400, 200, 55)
-btn_retry   = pygame.Rect(SCREEN_W // 2 - 150, 340, 300, 55)
-btn_proxima = pygame.Rect(SCREEN_W // 2 - 150, 340, 300, 55)
+def desenhar_personagem(surface, nome, cor, rect):
+    pygame.draw.rect(surface, cor, rect)
+    pygame.draw.rect(surface, (255, 255, 255), rect, 2)
+    logo = logos.get(nome)
+    if logo:
+        surface.blit(logo, rect.topleft)
+    txt = fonte.render(nome, True, (255, 255, 255))
+    tx = rect.x + (TAMANHO - txt.get_width()) // 2
+    surface.blit(txt, (tx, rect.y + TAMANHO + 4))
+
+btn_jogar        = pygame.Rect(SCREEN_W // 2 - 100, 320, 200, 55)
+btn_sair         = pygame.Rect(SCREEN_W // 2 - 100, 400, 200, 55)
+btn_retry        = pygame.Rect(SCREEN_W // 2 - 150, 340, 300, 55)
+btn_proxima      = pygame.Rect(SCREEN_W // 2 - 150, 340, 300, 55)
 btn_vitoria_menu = pygame.Rect(SCREEN_W // 2 - 150, 340, 300, 55)
 
 while True:
@@ -268,17 +294,10 @@ while True:
 
         pygame.draw.rect(screen, (0, 255, 0), fases[fase_atual]["meta"])
 
-        pygame.draw.rect(screen, (200, 20, 20), player)
-        texto_puc = fonte.render("PUCPR", True, (255, 255, 255))
-        puc_x = player.x + (TAMANHO - texto_puc.get_width()) // 2
-        screen.blit(texto_puc, (puc_x, player.y + TAMANHO + 4))
+        desenhar_personagem(screen, "PUCPR", (200, 20, 20), player)
 
         for ini in inimigos:
-            pygame.draw.rect(screen, ini["cor"], ini["rect"])
-            pygame.draw.rect(screen, (255, 255, 255), ini["rect"], 2)
-            texto_ini = fonte.render(ini["nome"], True, (255, 255, 255))
-            tx = ini["rect"].x + (TAMANHO - texto_ini.get_width()) // 2
-            screen.blit(texto_ini, (tx, ini["rect"].y + TAMANHO + 4))
+            desenhar_personagem(screen, ini["nome"], ini["cor"], ini["rect"])
 
         hud = fonte_media.render(f"Fase {fase_atual + 1}", True, (255, 255, 255))
         screen.blit(hud, (10, 10))
